@@ -15,6 +15,7 @@ int display(int *points, int px, int py, int ex, int ey);
 int positionlimit(int pchange); /*UPDATE IDEA*/
 int enemymovementx(int *points, int px, int py, int ex, int ey);
 int enemymovementy(int *points, int px, int py, int ex, int ey);
+int gameover(int *points, int px, int py, int ex, int ey);
 
 int main(){
     int *points = 0, playerx = 2, playery = 2, enemyx = 0, enemyy = 0;
@@ -59,29 +60,25 @@ int display(int *points, int px, int py, int ex, int ey){
 
     scanf("%i", &keymov);
 
+    ey = enemymovementy( points, px, py, ex, ey );
+    ex = enemymovementx( points, px, py, ex, ey );
+
     if(keymov == 1){
         py--;
-        ey = enemymovementy( points, px, py, ex, ey );
-        ex = enemymovementx( points, px, py, ex, ey );
-        display( points, px, py, ex, ey );
     } else if(keymov == 2){
         py++;
-        display( points, px, py, ex, ey );
     }else if(keymov == 3){
-        ey = enemymovementy( points, px, py, ex, ey );
-        ex = enemymovementx( points, px, py, ex, ey );
         px--;
-        display( points, px, py, ex, ey );
     }else if(keymov == 4){
-        ey = enemymovementy( points, px, py, ex, ey );
-        ex = enemymovementx( points, px, py, ex, ey );
         px++;
-        display( points, px, py, ex, ey );
     } else if(keymov == 0){
-        ey = enemymovementy( points, px, py, ex, ey );
-        ex = enemymovementx( points, px, py, ex, ey );
-        display( points, px, py, ex, ey );
+
     }
+
+    points ++;
+    gameover( points, px, py, ex, ey );
+    display( points, px, py, ex, ey );
+
 
  return SUCCES;
 }
@@ -99,15 +96,36 @@ enemymovementy(int *points, int px, int py, int ex, int ey){
     int i;
     int xacum = 0, yacum = 0;
 
-    for(i = ex ; i <= px ; i++){
-        xacum++;
-    }
-    for(i = ey ; i <= py ; i++){
-        yacum++;
-    }
+    if(ey == py){
 
-    if(yacum > xacum || yacum == xacum){
-        ey++;
+        return ey;
+
+    } else if (ey > py){
+
+        for(i = py ; i <= ey ; i++){
+            yacum++;
+        }
+        for(i = px ; i <= ey ; i++){
+            xacum++;
+        }
+
+        if(yacum > xacum || yacum == xacum){
+            ey--;
+        }
+
+    } else if (ey < py){
+
+        for(i = ey ; i <= py ; i++){
+            yacum++;
+        }
+        for(i = ex ; i <= px ; i++){
+            xacum++;
+        }
+
+        if(yacum > xacum || yacum == xacum){
+            ey++;
+        }
+
     }
 
  return ey;
@@ -118,19 +136,24 @@ enemymovementx(int *points, int px, int py, int ex, int ey){
     int xacum = 0, yacum = 0;
 
     if(ex == px){
-        return 0;
+
+        return ex;
+
     } else if (ex > px){
-        for(i = ex ; i <= px ; i++){
+
+        for(i = px ; i <= ex ; i++){
             xacum++;
         }
-        for(i = ey ; i <= py ; i++){
+        for(i = py ; i <= ey ; i++){
             yacum++;
         }
 
         if(xacum > yacum || yacum == xacum){
-            ex++;
+            ex--;
         }
+
     } else if (ex < px){
+
         for(i = ex ; i <= px ; i++){
             xacum++;
         }
@@ -141,9 +164,22 @@ enemymovementx(int *points, int px, int py, int ex, int ey){
         if(xacum > yacum || yacum == xacum){
             ex++;
         }
+
     }
 
  return ex;
+}
+
+gameover(int *points, int px, int py, int ex, int ey){
+    int i, j;
+
+    if(px == ex && py == ey){
+        printf("GAME OVER\n");
+        printf("POINTS: %i\n", points);
+        exit(1);
+    }
+
+ return SUCCES;
 }
 
 
