@@ -181,6 +181,3 @@ gameover(int *points, int px, int py, int ex, int ey){
 
  return SUCCES;
 }
-
-
-
