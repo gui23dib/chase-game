@@ -1,14 +1,18 @@
+import random
 import os
 from turtle import clear
 def cls(): os.system("cls")
 
-def showtable():
+def showtable(turn):
     cls()
+    if(turn == 1):
+        print("WELCOME!!!")
+        print("PRESS W/A/S/D TO START...")
     for i in range(5):
         for j in range(11):
             print(grid[i][j], end="")
         print()
-    statcheck()
+    starcheck(star_position)
 
 def tablecolision(p, max, newp):
     if(current_position[p] == max):
@@ -31,20 +35,17 @@ def playermoveinput(p_move):
         tablecolision(1, 11, 0)
     return current_position, clear_position
 
-def playermovement(current_position):
-    grid[current_position[0]][current_position[1]] = '-'
-    grid[y][x] = '0'
-    return grid,  current_position
-
 def tableupdate(k):
+    grid[star_position[0]][star_position[1]] = '*'
     grid[current_position[0]][current_position[1]] = '-'
     playermoveinput(k)
     grid[current_position[0]][current_position[1]] = '0'
-    showtable()
+    showtable(0)
     return grid
 
-def statcheck():
-    print(current_position[0], current_position[1])
+def starcheck(star_position):
+    if(current_position[0] == star_position[0] and current_position[1] == star_position[1]):
+        print("VOCE CAPTUROU A ESTRELA! PARABENS!")
 
 global grid 
 grid = [
@@ -58,8 +59,12 @@ global current_position
 current_position = [2, 5]
 # CURRENT_POSITION[0] === Y
 # CURRENT_POSITION[1] === X
+global star_position
+star_position = [random.randint(0, 4),random.randint(0, 10)]
+game_start_parameter = 1 # 1 for first turn and game star
 
 while True:
-    showtable()
+    showtable(game_start_parameter)
     player_key = input("--> ")
     tableupdate(player_key)
+    game_start_parameter = 0
